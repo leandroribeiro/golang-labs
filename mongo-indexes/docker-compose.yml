@@ -1,0 +1,14 @@
+version: '3.3'
+
+services:
+  database:
+    image: 'mongo'
+    container_name: 'my-mongo-container'
+    environment:
+      - MONGO_INITDB_DATABASE=goLabs
+      - MONGO_INITDB_ROOT_USERNAME=mestre
+      - MONGO_INITDB_ROOT_PASSWORD=siga-o-mestre
+    volumes:
+      - /home/leandro/Docker-Volumes/mongo:/data/db
+    ports:
+      - '27017-27019:27017-27019'
