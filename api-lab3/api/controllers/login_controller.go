@@ -12,5 +12,5 @@ func (server *Server) Login(w http.ResponseWriter, r *http.Request) {
 
 func (server *Server) SignIn(w http.ResponseWriter, r *http.Request) {
 	//TODO
-	responses.JSON(w, http.StatusCreated, )
+	responses.JSON(w, http.StatusCreated, nil)
 }
