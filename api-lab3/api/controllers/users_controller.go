@@ -14,7 +14,7 @@ import (
 	"strconv"
 )
 
-func (server *Server) CreateUser(w http.ResponseWriter, r http.Request) {
+func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -44,7 +44,7 @@ func (server *Server) CreateUser(w http.ResponseWriter, r http.Request) {
 	responses.JSON(w, http.StatusCreated, userCreated)
 }
 
-func (server *Server) GetUsers(w http.ResponseWriter, r http.Request) {
+func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 	user := models.User{}
 
 	users, err := user.FindAllUsers(server.DB)

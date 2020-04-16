@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
+	"github.com/leandroribeiro/go-labs/api-lab3/api/models"
 
 	_ "github.com/jinzhu/gorm/dialects/postgres" //postgres database driver
 
@@ -30,8 +31,7 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 		}
 	}
 
-	//TODO
-	//server.DB.Debug().AutoMigrate(&models.User{}, &models.Post{})
+	server.DB.Debug().AutoMigrate(&models.User{}, &models.Post{})
 
 	server.Router = mux.NewRouter()
 
