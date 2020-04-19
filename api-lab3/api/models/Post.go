@@ -100,7 +100,7 @@ func (p *Post) UpdateAPost(db *gorm.DB) (*Post, error) {
 		return &Post{}, err
 	}
 	if p.ID != 0 {
-		err = db.Debug().Model(&User{}).Where("id = ?", p.AuthorID).Take(&p.AuthorID).Error
+		err = db.Debug().Model(&User{}).Where("id = ?", p.AuthorID).Take(&p.Author).Error
 		if err != nil {
 			return &Post{}, err
 		}

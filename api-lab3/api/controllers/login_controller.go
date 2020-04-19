@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/leandroribeiro/go-labs/api-lab3/api/auth"
 	"github.com/leandroribeiro/go-labs/api-lab3/api/models"
 	"github.com/leandroribeiro/go-labs/api-lab3/api/responses"
@@ -12,7 +13,9 @@ import (
 )
 
 func (server *Server) Login(w http.ResponseWriter, r *http.Request) {
+
 	body, err := ioutil.ReadAll(r.Body)
+
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
@@ -31,6 +34,10 @@ func (server *Server) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	token, err := server.SignIn(user.Email, user.Password)
+
+	fmt.Println(token)
+	fmt.Println(err)
+
 	if err != nil {
 		formatedError := formaterror.FormatError(err.Error())
 		responses.ERROR(w, http.StatusUnprocessableEntity, formatedError)
@@ -49,9 +56,15 @@ func (server *Server) SignIn(email, password string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
+	//TODO Debug
+	fmt.Println("VerifyPassword")
 	err = models.VerifyPassword(user.Password, password)
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
 		return "", nil
 	}
+
+	//TODO Debug
+	fmt.Println("CreateToken")
 	return auth.CreateToken(user.ID)
 }

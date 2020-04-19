@@ -128,6 +128,11 @@ func (server *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Also check if the request user ID is equal to the oen gottem from token
+
+	//TODO
+	fmt.Println(uid)
+	fmt.Println(postUpdate.AuthorID)
+
 	if uid != postUpdate.AuthorID {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
