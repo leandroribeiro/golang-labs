@@ -36,8 +36,8 @@ func Database() {
 		DBURL := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s", os.Getenv("TestDbHost"), os.Getenv("TestDbPort"), os.Getenv("TestDbUser"), os.Getenv("TestDbName"), os.Getenv("TestDbPassword"))
 		server.DB, err = gorm.Open(TestDbDriver, DBURL)
 		if err != nil {
-			fmt.Println("Cannot connect to %s database\n", TestDbDriver)
-			log.Fatalf("This is the error:", err)
+			fmt.Printf("Cannot connect to %s database\n\n", TestDbDriver)
+			log.Fatal("This is the error:", err)
 		} else {
 			fmt.Printf("We are connect to the %s database\n", TestDbDriver)
 		}
