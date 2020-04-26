@@ -2,13 +2,11 @@ package controllertests
 
 import (
 	"fmt"
-	"github.com/prometheus/common/model"
-	"log"
 	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
 	"github.com/leandroribeiro/go-labs/api-lab3/api/controllers"
 	"github.com/leandroribeiro/go-labs/api-lab3/api/models"
-	"github.com/prometheus/common/log"
+	"log"
 	"os"
 	"testing"
 )
@@ -65,8 +63,8 @@ func seedOneUser() (models.User, error) {
 	}
 
 	user := models.User{
-		Nickname: "Pet",
-		Email:    "pet@gmail.com",
+		Nickname: "Mutano",
+		Email:    "mutano@email.com",
 		Password: "password",
 	}
 
@@ -77,7 +75,7 @@ func seedOneUser() (models.User, error) {
 	return user, nil
 }
 
-func sendUsers() ([]models.User, error) {
+func seedUsers() ([]models.User, error) {
 
 	var err error
 	if err != nil {
@@ -118,7 +116,7 @@ func refreshUserAndPostTable() error {
 	return nil
 }
 
-func seedOneAndOnePost() (models.Post, error) {
+func seedOneUserAndOnePost() (models.Post, error) {
 
 	err := refreshUserAndPostTable()
 	if err != nil {
