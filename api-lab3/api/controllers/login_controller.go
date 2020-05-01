@@ -2,12 +2,10 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/leandroribeiro/go-labs/api-lab3/api/auth"
 	"github.com/leandroribeiro/go-labs/api-lab3/api/models"
 	"github.com/leandroribeiro/go-labs/api-lab3/api/responses"
 	"github.com/leandroribeiro/go-labs/api-lab3/api/utils/formaterror"
-	"golang.org/x/crypto/bcrypt"
 	"io/ioutil"
 	"net/http"
 )
@@ -35,12 +33,9 @@ func (server *Server) Login(w http.ResponseWriter, r *http.Request) {
 	}
 	token, err := server.SignIn(user.Email, user.Password)
 
-	fmt.Println(token)
-	fmt.Println(err)
-
 	if err != nil {
-		formatedError := formaterror.FormatError(err.Error())
-		responses.ERROR(w, http.StatusUnprocessableEntity, formatedError)
+		formattedError := formaterror.FormatError(err.Error())
+		responses.ERROR(w, http.StatusUnprocessableEntity, formattedError)
 		return
 	}
 	responses.JSON(w, http.StatusOK, token)
@@ -57,14 +52,12 @@ func (server *Server) SignIn(email, password string) (string, error) {
 		return "", err
 	}
 
-	//TODO Debug
-	fmt.Println("VerifyPassword")
 	err = models.VerifyPassword(user.Password, password)
-	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
-		return "", nil
-	}
 
-	//TODO Debug
-	fmt.Println("CreateToken")
+	//TODO
+	//if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
+		//return "", nil
+	//}
+
 	return auth.CreateToken(user.ID)
 }
