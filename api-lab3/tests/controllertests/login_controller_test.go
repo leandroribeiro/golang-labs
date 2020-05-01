@@ -30,7 +30,7 @@ func TestSignIn(t *testing.T) {
 	}{
 		{
 			email:        user.Email,
-			password:     "password",
+			password:     "password", //Note the password has to be this, not the hashed one from the database
 			errorMessage: "",
 		},
 		{
@@ -48,10 +48,12 @@ func TestSignIn(t *testing.T) {
 	for _, v := range samples {
 
 		token, err := server.SignIn(v.email, v.password)
+
 		if err != nil {
 			assert.Equal(t, err, errors.New(v.errorMessage))
 		} else {
-			assert.NotEqual(t, token, "")
+			assert.NotEmpty(t, token, "Token should be not empty 1")
+			assert.NotEqual(t, token, "", "Token should be not empty 2")
 		}
 	}
 }
@@ -76,31 +78,32 @@ func TestLogin(t *testing.T) {
 		errorMessage string
 	}{
 		{
-			inputJSON:    `{"email": "mutano@email.com", "password": "password"}`,
+			inputJSON:    `{"email": "pet@gmail.com", "password": "password"}`,
 			statusCode:   200,
 			errorMessage: "",
 		},
 		{
-			inputJSON:    `{"email": "mutano@email.com", "password": "wrong_password"}`,
+			inputJSON:    `{"email": "pet@gmail.com", "password": "oioioioioioi"}`,
 			statusCode:   422,
 			errorMessage: "Incorrect Password",
 		},
 		{
-			inputJSON:    `{"email": "qualquercoisa@email.com", "password": "password"}`,
+			inputJSON:    `{"email": "frank@gmail.com", "password": "password"}`,
 			statusCode:   422,
 			errorMessage: "Incorrect Details",
 		},
 		{
-			inputJSON:    `{"email": "euemailcom", "password": "password"}`,
+			inputJSON:    `{"email": "kangmail.com", "password": "password"}`,
 			statusCode:   422,
 			errorMessage: "Invalid Email",
-		}, {
+		},
+		{
 			inputJSON:    `{"email": "", "password": "password"}`,
 			statusCode:   422,
 			errorMessage: "Required Email",
 		},
 		{
-			inputJSON:    `{"email": "user3@jedi.org", "password": ""}`,
+			inputJSON:    `{"email": "kan@gmail.com", "password": ""}`,
 			statusCode:   422,
 			errorMessage: "Required Password",
 		},
@@ -113,6 +116,10 @@ func TestLogin(t *testing.T) {
 
 	for _, v := range samples {
 
+		fmt.Println("-------------------")
+		fmt.Println(v)
+
+
 		req, err := http.NewRequest("POST", "/login", bytes.NewBufferString(v.inputJSON))
 		if err != nil {
 			t.Errorf("this is the error: %v", err)
@@ -121,18 +128,21 @@ func TestLogin(t *testing.T) {
 		handler := http.HandlerFunc(server.Login)
 		handler.ServeHTTP(rr, req)
 
-		assert.Equal(t, rr.Code, v.statusCode)
+		assert.Equal(t, v.statusCode, rr.Code)
 		if v.statusCode == 200 {
-			assert.NotEqual(t, rr.Body.String(), "")
+			assert.NotEqual(t, "", rr.Body.String())
 		}
 
+		fmt.Printf("Record: %v\n", rr.Body.String())
+
 		if v.statusCode == 422 && v.errorMessage != "" {
+
 			responseMap := make(map[string]interface{})
 			err = json.Unmarshal([]byte(rr.Body.String()), &responseMap)
 			if err != nil {
 				t.Errorf("Cannot convert to json: %v", err)
 			}
-			assert.Equal(t, responseMap["error"], v.errorMessage)
+			assert.Equal(t, v.errorMessage, responseMap["error"])
 		}
 	}
 }

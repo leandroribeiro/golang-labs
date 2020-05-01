@@ -6,7 +6,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/leandroribeiro/go-labs/api-lab3/api/controllers"
 	"github.com/leandroribeiro/go-labs/api-lab3/api/models"
-	"github.com/prometheus/common/log"
+	"log"
 	"os"
 	"testing"
 )
@@ -23,7 +23,11 @@ func TestMain(m *testing.M) {
 	}
 	Database()
 
-	os.Exit(m.Run())
+	log.Printf("Before calling m.Run() !!!")
+	ret := m.Run()
+	log.Printf("After calling m.Run() !!!")
+	//os.Exit(m.Run())
+	os.Exit(ret)
 }
 
 func Database() {
@@ -31,6 +35,32 @@ func Database() {
 	var err error
 
 	TestDbDriver := os.Getenv("TestDbDriver")
+
+	/*
+		if TestDbDriver == "mysql" {
+				DBURL := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", os.Getenv("TestDbUser"), os.Getenv("TestDbPassword"), os.Getenv("TestDbHost"), os.Getenv("TestDbPort"), os.Getenv("TestDbName"))
+				server.DB, err = gorm.Open(TestDbDriver, DBURL)
+				if err != nil {
+					fmt.Printf("Cannot connect to %s database\n", TestDbDriver)
+					log.Fatal("This is the error:", err)
+				} else {
+					fmt.Printf("We are connected to the %s database\n", TestDbDriver)
+				}
+			}
+
+			if TestDbDriver == "sqlite3" {
+				//DBURL := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s", DbHost, DbPort, DbUser, DbName, DbPassword)
+				testDbName := os.Getenv("TestDbName")
+				server.DB, err = gorm.Open(TestDbDriver, testDbName)
+				if err != nil {
+					fmt.Printf("Cannot connect to %s database\n", TestDbDriver)
+					log.Fatal("This is the error:", err)
+				} else {
+					fmt.Printf("We are connected to the %s database\n", TestDbDriver)
+				}
+				server.DB.Exec("PRAGMA foreign_keys = ON")
+			}
+	*/
 
 	if TestDbDriver == "postgres" {
 		DBURL := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s", os.Getenv("TestDbHost"), os.Getenv("TestDbPort"), os.Getenv("TestDbUser"), os.Getenv("TestDbName"), os.Getenv("TestDbPassword"))
@@ -45,26 +75,29 @@ func Database() {
 }
 
 func refreshUserTable() error {
+	server.DB.Exec("SET foreign_key_checks=0")
 	err := server.DB.DropTableIfExists(&models.User{}).Error
 	if err != nil {
 		return err
 	}
 
+	server.DB.Exec("SET foreign_key_checks=1")
 	err = server.DB.AutoMigrate(&models.User{}).Error
 	if err != nil {
 		return err
 	}
-	log.Debugf("Successfully refreshed table")
+	log.Printf("Successfully refreshed table")
+	log.Printf("refreshUserTable routine OK !!!")
 	return nil
 }
 
 func seedOneUser() (models.User, error) {
 
-	refreshUserTable()
+	_ = refreshUserTable()
 
 	user := models.User{
-		Nickname: "Asoka",
-		Email:    "asoka@jedi.org",
+		Nickname: "Pet",
+		Email:    "pet@gmail.com",
 		Password: "password",
 	}
 
@@ -72,19 +105,21 @@ func seedOneUser() (models.User, error) {
 	if err != nil {
 		log.Fatalf("cannot seed users table %v", err)
 	}
+
+	log.Printf("seedOneUser routine OK !!!")
 	return user, nil
 }
 
 func seedUsers() error {
 	users := []models.User{
 		models.User{
-			Nickname: "Yoda",
-			Email:    "yoda@jedi.org",
+			Nickname: "Steven victor",
+			Email:    "steven@gmail.com",
 			Password: "password",
 		},
 		models.User{
-			Nickname: "Sidious",
-			Email:    "sidious@sith.org",
+			Nickname: "Kenny Morris",
+			Email:    "kenny@gmail.com",
 			Password: "password",
 		},
 	}
@@ -95,20 +130,28 @@ func seedUsers() error {
 			return err
 		}
 	}
+
+	log.Printf("seedUsers routine OK !!!")
 	return nil
 }
 
 func refreshUserAndPostTable() error {
 
+	server.DB.Exec("SET foreign_key_checks=0")
+	// NOTE: when deleting first delete Post as Post is depending on User table
 	err := server.DB.DropTableIfExists(&models.User{}, &models.Post{}).Error
 	if err != nil {
 		return err
 	}
+
+	server.DB.Exec("SET foreign_key_checks=1")
 	err = server.DB.AutoMigrate(&models.User{}, &models.Post{}).Error
 	if err != nil {
 		return err
 	}
-	log.Debugf("Successfully refreshed tables")
+
+	log.Printf("Successfully refreshed tables")
+	log.Printf("refreshUserAndPostTable routine OK !!!")
 	return nil
 }
 
@@ -119,8 +162,8 @@ func seedOneUserAndOnePost() (models.Post, error) {
 		return models.Post{}, err
 	}
 	user := models.User{
-		Nickname: "Conde Doku",
-		Email:    "doku@sith.org",
+		Nickname: "Sam Phil",
+		Email:    "sam@gmail.com",
 		Password: "password",
 	}
 	err = server.DB.Model(&models.User{}).Create(&user).Error
@@ -136,6 +179,8 @@ func seedOneUserAndOnePost() (models.Post, error) {
 	if err != nil {
 		return models.Post{}, err
 	}
+
+	log.Printf("seedOneUserAndOnePost routine OK !!!")
 	return post, nil
 }
 
@@ -149,13 +194,13 @@ func seedUsersAndPosts() ([]models.User, []models.Post, error) {
 
 	var users = []models.User{
 		models.User{
-			Nickname: "Chewbacca",
-			Email:    "chewbacca@jedi.org",
+			Nickname: "Steven victor",
+			Email:    "steven@gmail.com",
 			Password: "password",
 		},
 		models.User{
-			Nickname: "Dart Maul",
-			Email:    "maul@sith.org",
+			Nickname: "Magu Frank",
+			Email:    "magu@gmail.com",
 			Password: "password",
 		},
 	}
@@ -183,5 +228,7 @@ func seedUsersAndPosts() ([]models.User, []models.Post, error) {
 			log.Fatalf("cannot seed posts table: %v", err)
 		}
 	}
+
+	log.Printf("seedUsersAndPosts routine OK !!!")
 	return users, posts, nil
 }

@@ -44,31 +44,43 @@ func Database() {
 }
 
 func refreshUserTable() error {
-	err := server.DB.DropTableIfExists(&models.User{}).Error
+	/*
+		err := server.DB.DropTableIfExists(&models.User{}).Error
+		if err != nil {
+			return err
+		}
+		err = server.DB.AutoMigrate(&models.User{}).Error
+		if err != nil {
+			return err
+		}
+		log.Printf("Successfully refreshed table")
+	*/
+	err := server.DB.DropTableIfExists(&models.Post{}, &models.User{}).Error
 	if err != nil {
 		return err
 	}
-	err = server.DB.AutoMigrate(&models.User{}).Error
+	err = server.DB.AutoMigrate(&models.User{}, &models.Post{}).Error
 	if err != nil {
 		return err
 	}
-	log.Printf("Successfully refreshed table")
+
 	return nil
 }
 
 func seedOneUser() (models.User, error) {
+
 	err := refreshUserTable()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	user := models.User{
-		Nickname: "Mutano",
-		Email:    "mutano@email.com",
+		Nickname: "Pet",
+		Email:    "pet@gmail.com",
 		Password: "password",
 	}
 
-	err = server.DB.Model(&models.User{}).Create(&user).Error
+	err = server.DB.Debug().Model(&models.User{}).Create(&user).Error
 	if err != nil {
 		return models.User{}, err
 	}
@@ -83,13 +95,13 @@ func seedUsers() ([]models.User, error) {
 	}
 	users := []models.User{
 		models.User{
-			Nickname: "Fulano",
-			Email:    "fulano@email.com",
+			Nickname: "Steven victor",
+			Email:    "steven@gmail.com",
 			Password: "password",
 		},
 		models.User{
-			Nickname: "Ciclano",
-			Email:    "ciclano@email.com",
+			Nickname: "Kenny Morris",
+			Email:    "kenny@gmail.com",
 			Password: "password",
 		},
 	}
@@ -104,7 +116,7 @@ func seedUsers() ([]models.User, error) {
 
 func refreshUserAndPostTable() error {
 
-	err := server.DB.DropTableIfExists(&models.User{}, &models.Post{}).Error
+	err := server.DB.DropTableIfExists(&models.Post{}, &models.User{}).Error
 	if err != nil {
 		return err
 	}
@@ -123,8 +135,8 @@ func seedOneUserAndOnePost() (models.Post, error) {
 		return models.Post{}, err
 	}
 	user := models.User{
-		Nickname: "Beltrano",
-		Email:    "beltrano@email.com",
+		Nickname: "Sam Phil",
+		Email:    "sam@gmail.com",
 		Password: "password",
 	}
 	err = server.DB.Model(&models.User{}).Create(&user).Error
@@ -150,13 +162,13 @@ func seedUsersAndPosts() ([]models.User, []models.Post, error) {
 	}
 	var users = []models.User{
 		models.User{
-			Nickname: "Fulano",
-			Email:    "fulano@email.com",
+			Nickname: "Steven victor",
+			Email:    "steven@gmail.com",
 			Password: "password",
 		},
 		models.User{
-			Nickname: "Ciclano",
-			Email:    "ciclano@email.com",
+			Nickname: "Magu Frank",
+			Email:    "magu@gmail.com",
 			Password: "password",
 		},
 	}
