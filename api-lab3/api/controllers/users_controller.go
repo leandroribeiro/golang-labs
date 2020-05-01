@@ -40,7 +40,7 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
 		return
 	}
-	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, userCreated.ID))
+	w.Header().Set("Location", fmt.Sprintf("%s/%d", r.Host, userCreated.ID))
 	responses.JSON(w, http.StatusCreated, userCreated)
 }
 
