@@ -2,7 +2,7 @@ package seed
 
 import (
 	"github.com/jinzhu/gorm"
-	"github.com/leandroribeiro/go-labs/api-lab3/api/models"
+	"github.com/leandroribeiro/golang-labs/api-lab3/api/models"
 	"github.com/prometheus/common/log"
 )
 

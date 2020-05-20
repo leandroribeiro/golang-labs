@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
-	"github.com/leandroribeiro/go-labs/api-lab3/api/models"
+	"github.com/leandroribeiro/golang-labs/api-lab3/api/models"
 
 	_ "github.com/jinzhu/gorm/dialects/postgres" //postgres database driver
 

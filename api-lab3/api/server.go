@@ -2,8 +2,8 @@ package api
 
 import (
 	"fmt"
-	"github.com/leandroribeiro/go-labs/api-lab3/api/controllers"
-	"github.com/leandroribeiro/go-labs/api-lab3/api/seed"
+	"github.com/leandroribeiro/golang-labs/api-lab3/api/controllers"
+	"github.com/leandroribeiro/golang-labs/api-lab3/api/seed"
 	"github.com/subosito/gotenv"
 	"log"
 	"os"

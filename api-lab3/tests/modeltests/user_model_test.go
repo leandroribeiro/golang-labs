@@ -1,9 +1,9 @@
 package modeltests
 
 import (
-	"github.com/leandroribeiro/go-labs/api-lab3/api/models"
-	"github.com/magiconair/properties/assert"
+	"github.com/leandroribeiro/golang-labs/api-lab3/api/models"
 	"github.com/prometheus/common/log"
+	"gopkg.in/go-playground/assert.v1"
 	"testing"
 )
 

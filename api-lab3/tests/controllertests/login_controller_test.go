@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/prometheus/common/log"
-	"github.com/stretchr/testify/assert"
+	"gopkg.in/go-playground/assert.v1"
 	"net/http"
 	"net/http/httptest"
 	"testing"

@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/leandroribeiro/go-labs/api-lab3/api/responses"
+	"github.com/leandroribeiro/golang-labs/api-lab3/api/responses"
 	"net/http"
 )
 

@@ -2,10 +2,10 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/leandroribeiro/go-labs/api-lab3/api/auth"
-	"github.com/leandroribeiro/go-labs/api-lab3/api/models"
-	"github.com/leandroribeiro/go-labs/api-lab3/api/responses"
-	"github.com/leandroribeiro/go-labs/api-lab3/api/utils/formaterror"
+	"github.com/leandroribeiro/golang-labs/api-lab3/api/auth"
+	"github.com/leandroribeiro/golang-labs/api-lab3/api/models"
+	"github.com/leandroribeiro/golang-labs/api-lab3/api/responses"
+	"github.com/leandroribeiro/golang-labs/api-lab3/api/utils/formaterror"
 	"io/ioutil"
 	"net/http"
 )

@@ -1,6 +1,6 @@
 package main
 
-import "github.com/leandroribeiro/go-labs/api-lab3/api"
+import "github.com/leandroribeiro/golang-labs/api-lab3/api"
 
 func main() {
 	api.Run()
