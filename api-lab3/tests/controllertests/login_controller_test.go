@@ -52,8 +52,8 @@ func TestSignIn(t *testing.T) {
 		if err != nil {
 			assert.Equal(t, err, errors.New(v.errorMessage))
 		} else {
-			assert.NotEmpty(t, token, "Token should be not empty 1")
-			assert.NotEqual(t, token, "", "Token should be not empty 2")
+			//assert.NotEqual(t, token, "Token should be not empty 1")
+			assert.NotEqual(t, token, "")
 		}
 	}
 }
@@ -116,10 +116,6 @@ func TestLogin(t *testing.T) {
 
 	for _, v := range samples {
 
-		fmt.Println("-------------------")
-		fmt.Println(v)
-
-
 		req, err := http.NewRequest("POST", "/login", bytes.NewBufferString(v.inputJSON))
 		if err != nil {
 			t.Errorf("this is the error: %v", err)
@@ -144,5 +140,6 @@ func TestLogin(t *testing.T) {
 			}
 			assert.Equal(t, v.errorMessage, responseMap["error"])
 		}
-	}
+
+	}//for
 }

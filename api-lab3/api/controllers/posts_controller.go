@@ -166,7 +166,8 @@ func (server *Server) DeletePost(w http.ResponseWriter, r *http.Request) {
 
 	// Is this user authenticated?
 	uid, err := auth.ExtractTokenID(r)
-	if err != nil {
+
+	if err != nil || uid == 0 {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
@@ -175,7 +176,7 @@ func (server *Server) DeletePost(w http.ResponseWriter, r *http.Request) {
 	post := models.Post{}
 	err = server.DB.Debug().Model(models.Post{}).Where("id = ?", pid).Take(&post).Error
 	if err != nil {
-		responses.ERROR(w, http.StatusNotFound, errors.New("Unauthorized"))
+		responses.ERROR(w, http.StatusNotFound, errors.New("Post not found"))
 		return
 	}
 

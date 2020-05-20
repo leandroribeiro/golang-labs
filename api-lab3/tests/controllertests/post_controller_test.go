@@ -247,7 +247,6 @@ func TestUpdatePost(t *testing.T) {
 		AuthPostID = post.ID
 		AuthPostAuthorID = post.AuthorID
 	}
-	// fmt.Printf("this is the auth post: %v\n", AuthPostID)
 
 	samples := []struct {
 		id           string
@@ -311,9 +310,9 @@ func TestUpdatePost(t *testing.T) {
 		{
 			id:           strconv.Itoa(int(AuthPostID)),
 			updateJSON:   `{"title":"This is another title", "content": "This is the updated content"}`,
-			statusCode:   422,
+			statusCode:   401,
 			tokenGiven:   tokenString,
-			errorMessage: "Required Author",
+			errorMessage: "Unauthorized",
 		},
 		{
 			id:         "unknwon",
@@ -341,8 +340,6 @@ func TestUpdatePost(t *testing.T) {
 
 		req.Header.Set("Authorization", v.tokenGiven)
 
-		fmt.Printf("Authorization %v", v.tokenGiven)
-
 		handler.ServeHTTP(rr, req)
 
 		responseMap := make(map[string]interface{})
@@ -350,6 +347,7 @@ func TestUpdatePost(t *testing.T) {
 		if err != nil {
 			t.Errorf("Cannot convert to json: %v", err)
 		}
+
 		assert.Equal(t, rr.Code, v.statusCode)
 		if v.statusCode == 200 {
 			assert.Equal(t, responseMap["title"], v.title)
@@ -382,7 +380,7 @@ func TestDeletePost(t *testing.T) {
 		if user.ID == 1 {
 			continue
 		}
-		PostUserPassword = user.Email
+		PostUserEmail = user.Email
 		PostUserPassword = "password" //Note the password in the database is already hashed, we want unhashed
 	}
 
@@ -448,7 +446,7 @@ func TestDeletePost(t *testing.T) {
 
 	for _, v := range postSample {
 
-		req, _ := http.NewRequest("GET", "/posts", nil)
+		req, _ := http.NewRequest("DELETE", "/posts", nil)
 		req = mux.SetURLVars(req, map[string]string{"id": v.id})
 
 		rr := httptest.NewRecorder()

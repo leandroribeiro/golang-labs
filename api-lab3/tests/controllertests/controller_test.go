@@ -63,7 +63,7 @@ func refreshUserTable() error {
 	if err != nil {
 		return err
 	}
-
+	log.Printf("Successfully refreshUserTable")
 	return nil
 }
 
@@ -84,6 +84,7 @@ func seedOneUser() (models.User, error) {
 	if err != nil {
 		return models.User{}, err
 	}
+	log.Printf("Successfully seedOneUser")
 	return user, nil
 }
 
@@ -111,6 +112,7 @@ func seedUsers() ([]models.User, error) {
 			return []models.User{}, err
 		}
 	}
+	log.Printf("Successfully seedUsers")
 	return users, nil
 }
 
@@ -124,7 +126,7 @@ func refreshUserAndPostTable() error {
 	if err != nil {
 		return err
 	}
-	log.Printf("Successfully refreshed table")
+	log.Printf("Successfully refreshUserAndPostTable")
 	return nil
 }
 
@@ -195,5 +197,6 @@ func seedUsersAndPosts() ([]models.User, []models.Post, error) {
 			log.Fatalf("cannot seed posts table: %v", err)
 		}
 	}
+	log.Printf("Successfully seedUsersAndPosts")
 	return users, posts, nil
 }
